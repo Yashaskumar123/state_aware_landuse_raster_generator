@@ -279,6 +279,24 @@ def process(raster: Path, changes: list[dict], states: Path, change_lookup: Path
             if not sum(assigned_counts.values()):
                 raise RuntimeError("No raster cells matched the state/crop lookup")
 
+            # Store exact statistics so GIS programs do not miss rare classes
+            # when they use a sampled/estimated raster maximum.
+            valid_count = sum(output_counts.values())
+            mean = sum(value * count for value, count in output_counts.items()) / valid_count
+            variance = (
+                sum(((value - mean) ** 2) * count for value, count in output_counts.items())
+                / valid_count
+            )
+            with rasterio.open(output_raster, "r+") as result:
+                result.update_tags(
+                    1,
+                    STATISTICS_MINIMUM=str(min(output_counts)),
+                    STATISTICS_MAXIMUM=str(max(output_counts)),
+                    STATISTICS_MEAN=f"{mean:.15g}",
+                    STATISTICS_STDDEV=f"{math.sqrt(variance):.15g}",
+                    STATISTICS_VALID_PERCENT=f"{100 * valid_count / (result.width * result.height):.15g}",
+                )
+
             with change_csv.open("w", newline="", encoding="utf-8") as stream:
                 writer = csv.DictWriter(stream, fieldnames=CHANGE_COLUMNS)
                 writer.writeheader()
