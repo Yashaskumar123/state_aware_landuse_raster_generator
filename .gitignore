@@ -1,0 +1,4 @@
+output/
+user_defined/*.tif
+user_defined/*.tiff
+__pycache__/

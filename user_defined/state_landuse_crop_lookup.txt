@@ -1,0 +1,8 @@
+State_id	Index	Landuse	change_landuse
+MH	1	Kharif	SOYB	Rabi	GRSG	Zaid	MUNG	Double/Triple_Crop	SOYB	Plantation	ORCD	Shifting_Cultivation	PMIL
+KA	2	Kharif	SOYB	Rabi	GRSG	Zaid	PNUT	Double/Triple_Crop	SOYB	Plantation	ORCD	Shifting_Cultivation	PMIL
+TS	3	Kharif	COTP	Rabi	RICE	Zaid	MUNG	Double/Triple_Crop	RICE	Plantation	ORCD	Shifting_Cultivation	PMIL
+AP	4	Kharif	RICE	Rabi	RICE	Zaid	RICE	Double/Triple_Crop	RICE	Plantation	COCO	Shifting_Cultivation	PMIL
+MP	5	Kharif	SOYB	Rabi	WWHT	Zaid	MUNG	Double/Triple_Crop	SOYB	Plantation	ORCD	Shifting_Cultivation	PMIL
+OD	6	Kharif	RICE	Rabi	MUNG	Zaid	RICE	Double/Triple_Crop	RICE	Plantation	CASH	Shifting_Cultivation	PMIL
+CH	7	Kharif	RICE	Rabi	FPEA	Zaid	WMEL	Double/Triple_Crop	RICE	Plantation	ORCD	Shifting_Cultivation	PMIL
