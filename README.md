@@ -1,5 +1,14 @@
 # State land-use crop tool
 
+## Download from GitHub
+
+Open a terminal where you want the tool and run:
+
+```text
+git clone https://github.com/Yashaskumar123/state_aware_landuse_raster_generator.git
+cd state_aware_landuse_raster_generator
+```
+
 ## What is in `assets`?
 
 - `state_shape.*` contains the state boundaries. Keep all five shapefile files together.
@@ -7,7 +16,7 @@
 
 ## What do I do?
 
-1. Put **one original land-use `.tif`** in `user_defined`.
+1. Put your **original land-use raster** in `user_defined` and name it `landuse.tif`. Another `.tif` or `.tiff` filename also works, but keep only one raster in this folder.
 2. Edit `user_defined/state_landuse_crop_lookup.txt` to choose a crop code for each land-use class in each state.
 3. Open a terminal in the `state_aware_landuse_raster_generator` folder and run `python reclassify.py`.
 4. Find the changed raster in `output/modified_landuse.tif`. The same folder also contains `landuse_change_lookup.csv` (what changed) and `swatplus_landuse_lookup.csv` (raster value to SWAT+ code).
