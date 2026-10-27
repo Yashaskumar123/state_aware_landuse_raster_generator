@@ -19,7 +19,9 @@ cd state_aware_landuse_raster_generator
 1. Put your **original land-use raster** in `user_defined` and name it `landuse.tif`. Another `.tif` or `.tiff` filename also works, but keep only one raster in this folder.
 2. Edit `user_defined/state_landuse_crop_lookup.txt` to choose a crop code for each land-use class in each state.
 3. Open a terminal in the `state_aware_landuse_raster_generator` folder and run `python reclassify.py`.
-4. Find the changed raster in `output/modified_landuse.tif`. The same folder also contains `landuse_change_lookup.csv` (what changed) and `swatplus_landuse_lookup.csv` (raster value to SWAT+ code).
+4. Find the changed raster in `output/modified_landuse.tif`. The same folder contains `landuse_change_lookup.csv` (what changed), `swatplus_landuse_lookup.csv` (raster value to SWAT+ code), and `landuse_codes.json` (the codes in JSON format).
+
+`example_landuse_codes.json` shows the JSON format for the included crop lookup.
 
 If Python reports a missing package, run `python -m pip install -r requirements.txt` first. For another run, use a new output folder: `python reclassify.py --output-dir output/run2`.
 

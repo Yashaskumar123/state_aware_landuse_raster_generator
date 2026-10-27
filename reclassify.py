@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import math
 from collections import Counter
 from pathlib import Path
@@ -182,12 +183,13 @@ def tally(array: np.ndarray, counter: Counter) -> None:
 
 
 def process(raster: Path, changes: list[dict], states: Path, change_lookup: Path,
-            output_dir: Path) -> tuple[Path, Path, Path]:
+            output_dir: Path) -> tuple[Path, Path, Path, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     output_raster = output_dir / "modified_landuse.tif"
     change_csv = output_dir / "landuse_change_lookup.csv"
     swat_csv = output_dir / "swatplus_landuse_lookup.csv"
-    for path in (output_raster, change_csv, swat_csv):
+    json_lookup = output_dir / "landuse_codes.json"
+    for path in (output_raster, change_csv, swat_csv, json_lookup):
         if path.exists():
             raise FileExistsError(f"Output already exists: {path}; choose a different --output-dir")
     if raster.resolve() == output_raster.resolve():
@@ -317,18 +319,26 @@ def process(raster: Path, changes: list[dict], states: Path, change_lookup: Path
                 writer.writerow(["LANDUSE_ID", "SWAT_CODE"])
                 for value in sorted(output_counts):
                     writer.writerow([value, assigned_codes.get(value, UNCHANGED_CODES.get(value, ""))])
+            lookup_data = {
+                str(value): assigned_codes.get(value, UNCHANGED_CODES.get(value, "")).lower()
+                for value in sorted(output_counts)
+            }
+            with json_lookup.open("w", encoding="utf-8") as stream:
+                json.dump(lookup_data, stream, indent=2)
+                stream.write("\n")
             unknown = sorted(v for v in output_counts if v not in assigned_codes and v not in UNCHANGED_CODES)
             print(f"Created raster: {output_raster}")
             print(f"Created change lookup: {change_csv}")
+            print(f"Created JSON lookup: {json_lookup}")
             print(f"Reclassified cells: {sum(assigned_counts.values()):,}")
             print(f"Positive cells preserved: {sum(output_counts.values()):,}")
             if unknown:
                 print(f"WARNING: No SWAT code is defined for unchanged input value(s) {unknown}; "
                       f"fill their blank codes in {swat_csv} before importing it into SWAT+.")
-            return output_raster, change_csv, swat_csv
+            return output_raster, change_csv, swat_csv, json_lookup
         except Exception:
             # An interrupted or invalid run must not leave a usable-looking raster.
-            for path in (output_raster, change_csv, swat_csv):
+            for path in (output_raster, change_csv, swat_csv, json_lookup):
                 if path.exists():
                     path.unlink()
             raise
